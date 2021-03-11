@@ -34,6 +34,23 @@ tags:
     description: Find out more
     url: https://www.starship42.com/
 paths:
+  /fleetview/load:
+    post:
+      tags:
+      - StarShip42.com
+      summary: Display 3D models of all the ships in your hangar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                  - $ref: "#/components/schemas/starship42.ship.json"
+      responses:
+        200:
+          description: successful operation
+          
   /download-json:
     get:
       tags:
@@ -49,11 +66,12 @@ paths:
                 items:
                   oneOf:
                     - $ref: "#/components/schemas/hangarxplor.ship.json"
+                    
   /erkul:
     get:
       tags:
       - erkul.games
-      summary: Does stuff
+      summary: Reserved for future use
       responses:
         200:
           description: successful operation
@@ -64,13 +82,12 @@ paths:
                 items:
                   oneOf:
                     - $ref: "#/components/schemas/erkul.ship.json"
+                    
 components:
   schemas:
   
     # The bare minimum needed to identify an entity
     core.entity.json:
-      required:
-        - name
       properties:
         # (Required) The name of the entity being described
         name:
@@ -184,3 +201,11 @@ components:
             warbond:
               type: boolean
               example: true
+    
+    # Definition of a ship as imported by StarShip42.com
+    starship42.ship.json:
+      required:
+        - name
+      allOf:
+        - $ref: '#/components/schemas/core.entity.json'
+      
