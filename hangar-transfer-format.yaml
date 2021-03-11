@@ -5,7 +5,14 @@ info:
     This is a draft specification for a file format which will facilitate the transfer of hangar data between different community managed tools
   version: 0.0.1
 servers:
-- url: /
+- url: https://erkul.games
+  description: "#DPSCalculator"
+- url: https://api.fleetyards.net
+  description: "API for RSI data"
+- url: https://hangarxplor.space
+  description: "Browser plugin to manage your RSI hangar"
+- url: https://www.starship42.com
+  description: "Star Citizen ship viewer and more"
 tags:
 - name: erkul.games
   description: "#DPSCalculator for Star Citizen"
@@ -20,7 +27,7 @@ tags:
   description: Browser plugin to manage your RSI hangar
   externalDocs:
     description: Find out more
-    url: https://github.com/dolkensp/HangarXPLOR
+    url: https://hangarxplor.space
 - name: StarShip42.com
   description: Star Citizen ship viewer and more
   externalDocs:
@@ -60,7 +67,7 @@ paths:
 components:
   schemas:
   
-    # The bare minimum
+    # The bare minimum needed to identify an entity
     core.entity.json:
       required:
         - name
@@ -79,7 +86,7 @@ components:
           - component
           - decoration
   
-    # Fields defined by RSI
+    # Core attributes of a pledge as defined by CIG
     rsi.pledge.json:
       properties:
         pledge_id:
@@ -136,18 +143,18 @@ components:
           - Aegis Dynamics
           - Anvil Aerospace
           - Aopoa
-          - Argo
+          - Argo Astronautics
           - Banu
           - Consolidated Outland
-          - Crusader
-          - Drake
+          - Crusader Industries
+          - Drake Planetary
           - Esperia
           - Greycat Industries
           - Kruger Intergalactic
           - Musashi Industrial and Starflight Concern
-          - Origin
+          - Origin Jumpworks
           - Roberts Space Industries
-          - Tumbril
+          - Tumbril Land Systems
           - Vanduul
           - Xi'an
     
@@ -155,6 +162,7 @@ components:
     erkul.ship.json:
       allOf:
         - $ref: '#/components/schemas/core.entity.json'
+        # Extra fields that erkul.games adds - ideally this list is kept to a minimum
         - type: object
           properties:
             localName:
@@ -167,6 +175,7 @@ components:
         - $ref: '#/components/schemas/core.entity.json'
         - $ref: '#/components/schemas/rsi.pledge.json'
         - $ref: '#/components/schemas/rsi.ship.json'
+        # Extra fields that HangarXPLOR adds - ideally this list is kept to a minimum
         - type: object
           properties:
             lti:
