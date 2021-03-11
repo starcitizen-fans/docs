@@ -5,23 +5,40 @@ info:
     This is a draft specification for a file format which will facilitate the transfer of hangar data between different community managed tools
   version: 0.0.1
 servers:
-- url: /
+- url: https://erkul.games
+  description: "#DPSCalculator"
+- url: https://api.fleetyards.net
+  description: "API for RSI data"
+- url: https://hangarxplor.space
+  description: "Browser plugin to manage your RSI hangar"
+- url: https://www.starship42.com
+  description: "Star Citizen ship viewer and more"
 tags:
 - name: erkul.games
-- name: FleetYards.net
-- name: HangarXPLOR
-  description: Browser Plugin to manage your RSI hangar
+  description: "#DPSCalculator for Star Citizen"
   externalDocs:
     description: Find out more
-    url: https://docs.hangarxplor.space
+    url: https://erkul.games
+- name: FleetYards.net
+  externalDocs:
+    description: Find out more
+    url: https://api.fleetyards.net/v1
+- name: HangarXPLOR
+  description: Browser plugin to manage your RSI hangar
+  externalDocs:
+    description: Find out more
+    url: https://hangarxplor.space
 - name: StarShip42.com
+  description: Star Citizen ship viewer and more
+  externalDocs:
+    description: Find out more
+    url: https://www.starship42.com/
 paths:
-  /download:
+  /download-json:
     get:
       tags:
       - HangarXPLOR
       summary: Downloads the contents of your hangar from the RSI website
-      operationId: addPet
       responses:
         200:
           description: successful operation
@@ -32,43 +49,75 @@ paths:
                 items:
                   oneOf:
                     - $ref: "#/components/schemas/hangarxplor.ship.json"
+  /erkul:
+    get:
+      tags:
+      - erkul.games
+      summary: Does stuff
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: "#/components/schemas/erkul.ship.json"
 components:
   schemas:
-    hangarxplor.ship.json:
+  
+    # The bare minimum needed to identify an entity
+    core.entity.json:
       required:
-      - name
-      type: object
+        - name
       properties:
+        # (Required) The name of the entity being described
         name:
           type: string
           example: Carrack
-        localName:
+        # (Optional) Specifies what type of entity is being described
+        entity_type:
+          type: string
+          example: ship
+          default: ship
+          enum:
+          - ship
+          - component
+          - decoration
+  
+    # Core attributes of a pledge as defined by CIG
+    rsi.pledge.json:
+      properties:
+        pledge_id:
+          type: string
+          example: "12345678"
+        pledge_name:
+          type: string
+          example: "Standalone Ship - Anvil Carrack Warbond - LTI"
+        pledge_date:
+          type: string
+          format: date
+          example: "2016-12-08"
+        pledge_cost:
+          type: string
+          format: currency
+          example: "$350 USD"
+    
+    # Core attributes of a ship as defined by CIG
+    rsi.ship.json:
+      type: object
+      properties:
+        ship_code:
           type: string
           example: ANVL_Carrack
-        manufacturer:
+        # The name (or nickname) of the ship
+        ship_name:
           type: string
-          example: Anvil Aerospace
-          enum:
-          - Aegis Dynamics
-          - Anvil Aerospace
-          - Aopoa
-          - Argo
-          - Banu
-          - Consolidated Outland
-          - Crusader
-          - Drake
-          - Esperia
-          - Greycat Industries
-          - Kruger Intergalactic
-          - Musashi Industrial and Starflight Concern
-          - Origin
-          - Roberts Space Industries
-          - Tumbril
-          - Vanduul
-          - Xi'an
+          example: Serenity
         manufacturer_code:
           type: string
-          example: ANVL
+          example: "ANVL"
           enum:
           - AEGI
           - ANVL
@@ -87,32 +136,51 @@ components:
           - TUMB
           - VAND
           - XIAN
-        nickname:
+        manufacturer_name:
           type: string
-          example: Serenity
-        lti:
-          type: boolean
-          example: true
-        warbond:
-          type: boolean
-          example: true
-        package_id:
-          type: string
-          example: "12345678"
-        pledge:
-          type: string
-          example: Standalone Ship - Anvil Carrack Warbond - LTI
-        pledge_date:
-          type: string
-          format: date
-          example: 2016-12-08
-        cost:
-          type: string
-          format: currency
-          example: $350 USD
-        type:
-          type: string
-          example: ship
-          default: ship
+          example: "Anvil Aerospace"
           enum:
-          - ship
+          - Aegis Dynamics
+          - Anvil Aerospace
+          - Aopoa
+          - Argo Astronautics
+          - Banu
+          - Consolidated Outland
+          - Crusader Industries
+          - Drake Planetary
+          - Esperia
+          - Greycat Industries
+          - Kruger Intergalactic
+          - Musashi Industrial and Starflight Concern
+          - Origin Jumpworks
+          - Roberts Space Industries
+          - Tumbril Land Systems
+          - Vanduul
+          - Xi'an
+    
+    # Definition of a ship as used by erkul.games
+    erkul.ship.json:
+      allOf:
+        - $ref: '#/components/schemas/core.entity.json'
+        # Extra fields that erkul.games adds - ideally this list is kept to a minimum
+        - type: object
+          properties:
+            localName:
+              type: string
+              example: ANVL_Carrack
+    
+    # Definition of a ship as exported by HangarXPLOR
+    hangarxplor.ship.json:
+      allOf:
+        - $ref: '#/components/schemas/core.entity.json'
+        - $ref: '#/components/schemas/rsi.pledge.json'
+        - $ref: '#/components/schemas/rsi.ship.json'
+        # Extra fields that HangarXPLOR adds - ideally this list is kept to a minimum
+        - type: object
+          properties:
+            lti:
+              type: boolean
+              example: true
+            warbond:
+              type: boolean
+              example: true
