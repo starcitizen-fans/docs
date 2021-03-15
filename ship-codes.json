@@ -54,6 +54,18 @@
     "manufacturer_name": "Aegis Dynamics"
   },
   {
+    "ship_code": "AEGS_Idris_M",
+    "ship_name": "Aegis Idris-M",
+    "manufacturer_code": "AEGS",
+    "manufacturer_name": "Aegis Dynamics"
+  },
+  {
+    "ship_code": "AEGS_Idris_P",
+    "ship_name": "Aegis Idris-P",
+    "manufacturer_code": "AEGS",
+    "manufacturer_name": "Aegis Dynamics"
+  },
+  {
     "ship_code": "AEGS_Reclaimer",
     "ship_name": "Aegis Reclaimer",
     "manufacturer_code": "AEGS",
