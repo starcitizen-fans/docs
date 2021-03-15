@@ -13,6 +13,8 @@ servers:
   description: "Browser plugin to manage your RSI hangar"
 - url: https://www.starship42.com
   description: "Star Citizen ship viewer and more"
+- url: https://docs.starcitizen.fans
+  description: "Open Specification for Star Citizen community tools"
 tags:
 - name: erkul.games
   description: "#DPSCalculator for Star Citizen"
@@ -33,6 +35,8 @@ tags:
   externalDocs:
     description: Find out more
     url: https://www.starship42.com/
+- name: starcitizen.fans
+  description: Open Specifications for Star Citizen community tools
 paths:
   /fleetview/load:
     post:
@@ -50,7 +54,20 @@ paths:
       responses:
         200:
           description: successful operation
-          
+  /ship-codes.json:
+    get:
+      tags:
+      - starcitizen.fans
+      summary: Return a list of all currently supported ships and their associated codes
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/rsi.ship.json"
   /download-json:
     get:
       tags:
@@ -127,14 +144,16 @@ components:
       properties:
         ship_code:
           type: string
+          description: A code that uniquely identifies the ship and it's variant to all community tools
           example: ANVL_Carrack
-        # The name (or nickname) of the ship
         ship_name:
           type: string
+          description: The name, or nickname of the given ship
           example: Serenity
         manufacturer_code:
           type: string
-          example: "ANVL"
+          description: A code that uniquely identifies the manufacturer to all community tools
+          example: ANVL
           enum:
           - AEGI
           - ANVL
@@ -151,11 +170,12 @@ components:
           - ORIG
           - RSI
           - TUMB
-          - VAND
+          - VNCL
           - XIAN
         manufacturer_name:
           type: string
-          example: "Anvil Aerospace"
+          description: The full display name of the ships manufacturer
+          example: Anvil Aerospace
           enum:
           - Aegis Dynamics
           - Anvil Aerospace
@@ -189,10 +209,13 @@ components:
     # Definition of a ship as exported by HangarXPLOR
     hangarxplor.ship.json:
       allOf:
+        # It is recommended all community tools support core.entity.json
         - $ref: '#/components/schemas/core.entity.json'
+        # Information extracted from the RSI website
         - $ref: '#/components/schemas/rsi.pledge.json'
+        # Information about a given ship
         - $ref: '#/components/schemas/rsi.ship.json'
-        # Extra fields that HangarXPLOR adds - ideally this list is kept to a minimum
+        # Extra fields that HangarXPLOR adds
         - type: object
           properties:
             lti:
