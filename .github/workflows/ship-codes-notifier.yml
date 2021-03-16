@@ -24,5 +24,12 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1
       with:
           severity: info
+          description: |
+            https://starcitizen.fans/ship-codes.json was updated
+            
+            **Author**: {{ github.head_commit.author.name	}}
+            **Commit**: [{{ github.sha }}]({{ github.event.head_commit.url }})
+            
+            {{ github.event.head_commit.message }}
           details: ship-codes.json updated
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
