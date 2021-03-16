@@ -28,8 +28,8 @@ jobs:
           description: |
             https://starcitizen.fans/ship-codes.json was updated
             
-            **Author**: ${{ CI_ACTOR	}}
-            **Commit**: [${{ CI_SHA_SHORT }}](${{ github.event.head_commit.url }})
+            **Author**: ${{ env.CI_ACTOR	}}
+            **Commit**: [${{ env.CI_SHA_SHORT }}](${{ github.event.head_commit.url }})
             
             ${{ github.event.head_commit.message }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
