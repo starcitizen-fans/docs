@@ -66,6 +66,12 @@
     "manufacturer_name": "Aegis Dynamics"
   },
   {
+    "ship_code": "AEGS_Javelin",
+    "ship_name": "Aegis Javelin",
+    "manufacturer_code": "AEGS",
+    "manufacturer_name": "Aegis Dynamics"
+  },
+  {
     "ship_code": "AEGS_Reclaimer",
     "ship_name": "Aegis Reclaimer",
     "manufacturer_code": "AEGS",
